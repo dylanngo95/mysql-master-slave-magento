@@ -1,4 +1,4 @@
-Docker MySQL master-slave replication 
+Docker MySQL master-slave replication support magento2 db
 ========================
 
 MySQL master-slave replication with using Docker. 
