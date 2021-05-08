@@ -1,0 +1,40 @@
+version: '3'
+services:
+  mysql_master:
+    image: mysql:5.7
+    env_file:
+      - ./master/mysql_master.env
+    container_name: "mysql_master"
+    restart: "no"
+    ports:
+      - 4406:3306
+    volumes:
+      - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./master/data:/var/lib/mysql
+      - ./master/init-db:/docker-entrypoint-initdb.d
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.1
+
+  mysql_slave:
+    image: mysql:5.7
+    env_file:
+      - ./slave/mysql_slave.env
+    container_name: "mysql_slave"
+    restart: "no"
+    ports:
+      - 5506:3306
+    volumes:
+      - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./slave/data:/var/lib/mysql
+      - ./slave/init-db:/docker-entrypoint-initdb.d
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.2
+
+networks:
+  testing_net:
+    ipam:
+        driver: default
+        config:
+            - subnet: 172.28.0.0/16
